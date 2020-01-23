@@ -2,8 +2,8 @@ var spaceInvaders = spaceInvaders || {};
 
 
 var gameOptions ={
-    gameWidth:506,
-    gameHeight:448,
+    gameWidth:32*20,
+    gameHeight:32*14,
     playerSpeed:100,
     playerLifes: 3
     

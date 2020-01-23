@@ -9,6 +9,7 @@ spaceInvaders.gameState = {
         this.scale.setGameSize(gameOptions.gameWidth, gameOptions.gameHeight);
                 
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
+        
         this.game.renderer.renderSession.roundPixels = true; 
         this.game.world.setBounds(0, 0, gameOptions.gameWidth, gameOptions.gameHeight);
         
@@ -16,7 +17,14 @@ spaceInvaders.gameState = {
     //PRELOAD FUNCTION
     preload:function(){
         this.game.stage.backgroundColor = "#46384d";
+        
+        //Routes
+        var route_tiled = 'assets/tiled/';
         var route_spr = 'assets/images/';
+        
+        //MAP
+        this.load.image('background', route_spr + 'background.png')
+        this.load.tilemap('wallCollision', route_tiled + 'MapSpaceInvaders.json', null, Phaser.Tilemap.TILED_JSON);
         
         //Player
         this.load.image('player', route_spr + 'Ship.png');
@@ -30,6 +38,7 @@ spaceInvaders.gameState = {
         this.load.spritesheet('invaderC', route_spr + 'spr_InvaderC.png',48,32);
         
         
+        
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
        this.space.onDown.add(function(){this.createProjectile();},this); 
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -39,9 +48,22 @@ spaceInvaders.gameState = {
    
     },
     create:function(){
+        //Map
+        
+        //this.bg1 =this.game.add.tileSprite(0,0, gameOptions.gameWidth, gameOptions.gameHeight,'background');
+        this.map = this.game.add.tilemap('wallCollision');
+        this.tileset = this.map.addTilesetImage('background');
+        this.walls = this.map.createLayer('Walls');
+        
+        //this.walls = this.map.createLayer('Walls');
         
         //PLAYER
         this.player = new spaceInvaders.player_prefab(this.game,gameOptions.gameWidth/2,gameOptions.gameHeight/1.2, gameOptions.playerSpeed,this);
+        
+        //collision
+        
+        this.map.setCollisionBetween(1,999,true,'Walls');
+        this.game.physics.arcade.collide(this.player, this.walls);
         
         //Bullet
         this.loadProjectile();
@@ -57,7 +79,8 @@ spaceInvaders.gameState = {
         
     },
     update:function(){
-
+        
+        this.game.physics.arcade.collide(this.walls,this.player);
         this.game.physics.arcade.overlap(this.projectiles,this.enemies,this.collisionProjectileEnemy,null,this);
         
         },

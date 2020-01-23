@@ -17,6 +17,8 @@ spaceInvaders.player_prefab = function(_game,_x,_y,_speed,_level,_playerLifes)
     _game.add.existing(this);
     _game.physics.arcade.enable(this);
     
+    
+    
 }
 
 spaceInvaders.player_prefab.prototype = Object.create(Phaser.Sprite.prototype);
